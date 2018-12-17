@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * @author brunomoreira
@@ -13,17 +14,17 @@ import java.util.Date;
 public class Transaction implements Serializable{
 
 
-    private BigDecimal ammount;
+    private BigDecimal amount;
 
 
     private Date timestamp;
 
-    public BigDecimal getAmmount() {
-        return ammount;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setAmmount(BigDecimal ammount) {
-        this.ammount = ammount;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public Date getTimestamp() {
@@ -31,6 +32,11 @@ public class Transaction implements Serializable{
     }
 
     public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Transaction(BigDecimal amount, Date timestamp){
+        this.amount = amount;
         this.timestamp = timestamp;
     }
 }
