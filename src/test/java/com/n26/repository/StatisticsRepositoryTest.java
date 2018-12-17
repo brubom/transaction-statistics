@@ -32,14 +32,16 @@ public class StatisticsRepositoryTest {
     @Test
     public void shouldCreateStatistics(){
 
-        Statistics statistics = statisticsRepository.create(new Statistics(
+        Statistics statistics = new Statistics(
                 new BigDecimal(1000.00),
                 new BigDecimal(100.53),
                 new BigDecimal(200000.49),
                 new BigDecimal(50.23),
                 10L
 
-        ));
+        );
+
+        statisticsRepository.updateStatistics(statistics);
 
         assertNotNull(statistics);
     }

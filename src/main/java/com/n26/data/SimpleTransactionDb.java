@@ -5,10 +5,7 @@ import com.n26.model.Transaction;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -18,45 +15,90 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  * on exercise that this should be a prod ready code, using a nosql database or at least a
  * caching mechanism is a must.
  */
-public class SimpleTransactionDb extends LinkedHashMap<Date, Transaction> {
+public class SimpleTransactionDb {
 
     private static final SimpleTransactionDb INSTANCE = new SimpleTransactionDb();
     public static SimpleTransactionDb getInstance() {
         return INSTANCE;
     }
 
-    private HashMap<Date, Transaction> HashMap = new HashMap<>();
+    private LinkedList<Transaction> transactions = new LinkedList<>();
 
-    public void add(Date date, Transaction transaction){
-        HashMap.put(date, transaction);
+    private static final int CACHE_TTL = 60;
+
+    private SimpleTransactionDb(){
+
+        Thread t = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(CACHE_TTL * 1000);
+                } catch (InterruptedException ex) {
+                }
+                cleanup();
+            }
+        });
+
+        t.setDaemon(true);
+        t.start();
+    }
+
+    public void add(Transaction transaction){
+        transactions.add(transaction);
     }
 
     public void clear(){
 
-        HashMap.clear();
+        transactions.clear();
     }
 
-    public Transaction get(Date date){
-        return HashMap.get(date);
+    public Transaction get(int index){
+        return transactions.get(index);
     }
 
    public Long count(){
-        return Long.valueOf(HashMap.size());
+        return Long.valueOf(transactions.size());
    }
    
-   public HashMap<Date, Transaction> getAllTransactions(){
-        return this.HashMap;
+   public LinkedList<Transaction>  getAllTransactions(){
+        return this.transactions;
    }
 
 
-    protected boolean removeEldestEntry(Map.Entry eldest) {
+   private void cleanup(){
 
-        LocalDateTime currentTime = LocalDateTime.now();
 
-        LocalDateTime eldestTime = Instant.ofEpochMilli(((Date) eldest.getKey()).getTime())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+       synchronized (transactions) {
 
-        return SECONDS.between(currentTime, eldestTime) > 60;
+           while (true) {
+
+               Transaction transaction = this.transactions.getFirst();
+               if (transaction == null) {
+                   break;
+               }
+
+               LocalDateTime currentTime = LocalDateTime.now();
+
+               LocalDateTime transactionTime =
+                       LocalDateTime.ofInstant(transaction.getTimestamp().toInstant(), ZoneId.systemDefault());
+
+               if (SECONDS.between(currentTime, transactionTime) > CACHE_TTL) {
+                   transactions.removeFirst();
+                   updateStatistics();
+               } else {
+                   break;
+               }
+
+               Thread.yield();
+
+           }
+       }
+
+
+   }
+
+    private void updateStatistics() {
+
+
     }
+
 }

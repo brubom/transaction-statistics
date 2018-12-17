@@ -19,7 +19,7 @@ public class TransactionRepository {
 
     public Transaction create(Transaction transaction) {
 
-        db.add(transaction.getTimestamp(), transaction);
-        return db.get(transaction.getTimestamp());
+        db.add(transaction);
+        return transaction;
     }
 }
