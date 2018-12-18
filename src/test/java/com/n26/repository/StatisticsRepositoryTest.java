@@ -45,11 +45,11 @@ public class StatisticsRepositoryTest {
 
         assertNotNull(statistics);
 
-        assertEquals(new BigDecimal(533.33), statistics.getAvg());
-        assertEquals(new BigDecimal(1000), statistics.getMax());
-        assertEquals(new BigDecimal(100), statistics.getMin());
-        assertEquals(new BigDecimal(1600), statistics.getSum());
-        assertEquals(Long.valueOf(3), statistics.getCount());
+        assertEquals(new BigDecimal(425).setScale(2, BigDecimal.ROUND_HALF_UP), statistics.getAvg());
+        assertEquals(new BigDecimal(1000).setScale(2, BigDecimal.ROUND_HALF_UP), statistics.getMax());
+        assertEquals(new BigDecimal(100).setScale(2, BigDecimal.ROUND_HALF_UP), statistics.getMin());
+        assertEquals(new BigDecimal(1700).setScale(2, BigDecimal.ROUND_HALF_UP), statistics.getSum());
+        assertEquals(Long.valueOf(4), statistics.getCount());
 
 
     }

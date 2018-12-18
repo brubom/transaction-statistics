@@ -33,6 +33,7 @@ public class StatisticsDbTest {
     @Test
     public void shouldNotShowExpiredTransaction(){
 
+        statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf( 7), System.currentTimeMillis() ));
         StatisticsAggregate aggregate = statisticsDb.getStatistics();
         statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf( 16.98), System.currentTimeMillis() - 60000));
         assertEquals(aggregate, statisticsDb.getStatistics() );
@@ -42,6 +43,7 @@ public class StatisticsDbTest {
     @Test
     public void whenValidTransaction_UpdateStatistics(){
 
+        statisticsDb.clear();
         statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf(100), System.currentTimeMillis()));
         statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf(15.87877), System.currentTimeMillis() - 1000));
         statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf(8), System.currentTimeMillis() - 3000));
