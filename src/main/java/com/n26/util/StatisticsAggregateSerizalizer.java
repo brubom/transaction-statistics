@@ -3,6 +3,7 @@ package com.n26.util;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.n26.exception.SerializationException;
 import com.n26.model.StatisticsAggregate;
 import org.springframework.boot.jackson.JsonComponent;
 
@@ -36,7 +37,7 @@ public class StatisticsAggregateSerizalizer extends JsonSerializer<StatisticsAgg
 
             jsonGenerator.writeEndObject();
         }catch (Exception ex){
-            System.console().printf(ex.toString());
+           throw new SerializationException();
         }
 
     }

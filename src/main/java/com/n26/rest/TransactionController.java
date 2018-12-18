@@ -1,5 +1,7 @@
 package com.n26.rest;
 
+import com.n26.exception.DeserializationException;
+import com.n26.exception.SerializationException;
 import com.n26.model.Transaction;
 import com.n26.repository.TransactionRepository;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,11 @@ public class TransactionController {
 
         }
 
+        if(transaction.getTimestamp() > System.currentTimeMillis()){
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return;
+        }
+
         transactionRepository.create(transaction);
         response.setStatus(HttpStatus.CREATED.value());
     }
@@ -37,6 +44,22 @@ public class TransactionController {
     public void deleteAll(){
 
         transactionRepository.clear();
+    }
+
+    @ExceptionHandler(SerializationException.class)
+    public void serializationErrorHandler(HttpServletResponse response) {
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
+
+    @ExceptionHandler(DeserializationException.class)
+    public void deserializationErrorHandler(DeserializationException error, HttpServletResponse response) {
+
+        if(error.getErrorCode() == DeserializationException.ErrorCodes.INVALID_JSON)
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+
+        if(error.getErrorCode() == DeserializationException.ErrorCodes.INVALID_FIELD_VALUE)
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 
 }

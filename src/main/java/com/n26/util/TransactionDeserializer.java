@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.n26.exception.DeserializationException;
 import com.n26.model.Transaction;
 import org.springframework.boot.jackson.JsonComponent;
 
@@ -18,14 +19,21 @@ public class TransactionDeserializer extends JsonDeserializer<Transaction> {
     @Override
     public Transaction deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
+        try {
 
-        TreeNode treeNode = jsonParser.getCodec().readTree(jsonParser);
-        TextNode timestamp = (TextNode) treeNode.get("timestamp");
-        TextNode amount = (TextNode) treeNode.get("amount");
+            TreeNode treeNode = jsonParser.getCodec().readTree(jsonParser);
+            TextNode timestamp = (TextNode) treeNode.get("timestamp");
+            TextNode amount = (TextNode) treeNode.get("amount");
 
-        Transaction transaction = new Transaction(new BigDecimal(amount.asText()),
-                Instant.parse( timestamp.asText() ).toEpochMilli());
+            Transaction transaction = new Transaction(new BigDecimal(amount.asText()),
+                    Instant.parse(timestamp.asText()).toEpochMilli());
 
-        return transaction;
+            return transaction;
+        }catch (NullPointerException ex){
+            throw new DeserializationException(DeserializationException.ErrorCodes.INVALID_JSON);
+        }
+        catch (Exception ex){
+            throw new DeserializationException(DeserializationException.ErrorCodes.INVALID_FIELD_VALUE);
+        }
     }
 }
