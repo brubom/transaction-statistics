@@ -2,12 +2,10 @@ package com.n26.data;
 
 import com.n26.model.Statistics;
 
-import java.math.BigDecimal;
+public class StatisticsDb {
 
-public class SimpleStatisticsDb {
-
-    private static final SimpleStatisticsDb INSTANCE = new SimpleStatisticsDb();
-    public static SimpleStatisticsDb getInstance() {
+    private static final StatisticsDb INSTANCE = new StatisticsDb();
+    public static StatisticsDb getInstance() {
         return INSTANCE;
     }
 

@@ -2,7 +2,6 @@ package com.n26.data;
 
 import com.n26.model.Transaction;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -15,10 +14,10 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  * on exercise that this should be a prod ready code, using a nosql database or at least a
  * caching mechanism is a must.
  */
-public class SimpleTransactionDb {
+public class TransactionDb {
 
-    private static final SimpleTransactionDb INSTANCE = new SimpleTransactionDb();
-    public static SimpleTransactionDb getInstance() {
+    private static final TransactionDb INSTANCE = new TransactionDb();
+    public static TransactionDb getInstance() {
         return INSTANCE;
     }
 
@@ -26,7 +25,7 @@ public class SimpleTransactionDb {
 
     private static final int CACHE_TTL = 60;
 
-    private SimpleTransactionDb(){
+    private TransactionDb(){
 
         Thread t = new Thread(() -> {
             while (true) {

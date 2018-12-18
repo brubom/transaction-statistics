@@ -1,11 +1,11 @@
 package com.n26.repository;
 
-import com.n26.data.SimpleStatisticsDb;
+import com.n26.data.StatisticsDb;
 import com.n26.model.Statistics;
 
 public class StatisticsRepository {
 
-    private final SimpleStatisticsDb statisticsDb = SimpleStatisticsDb.getInstance();
+    private final StatisticsDb statisticsDb = StatisticsDb.getInstance();
 
     public void updateStatistics(Statistics statistics) {
 

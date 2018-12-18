@@ -9,9 +9,9 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class SimpleDbTest {
+public class TransactionDbTest {
 
-    private final SimpleTransactionDb db = SimpleTransactionDb.getInstance();
+    private final TransactionDb db = TransactionDb.getInstance();
 
     @Test
     public void shouldHaveInstance(){

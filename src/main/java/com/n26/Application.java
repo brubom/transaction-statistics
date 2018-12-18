@@ -1,12 +1,12 @@
 package com.n26;
 
+import com.n26.data.StatisticsDb;
+import com.n26.data.TransactionDb;
 import com.n26.repository.StatisticsRepository;
 import com.n26.repository.TransactionRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import javax.inject.Inject;
 
 @SpringBootApplication
 public class Application {
@@ -24,5 +24,14 @@ public class Application {
     @Bean
     public StatisticsRepository statisticsRepository(){
         return  new StatisticsRepository();
+    }
+
+    @Bean
+    public StatisticsDb simpleStatisticsDb(){
+        return StatisticsDb.getInstance();
+    }
+
+    public TransactionDb simpleTransactionDb(){
+        return TransactionDb.getInstance();
     }
 }
