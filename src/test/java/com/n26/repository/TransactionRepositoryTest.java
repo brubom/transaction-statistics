@@ -7,9 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-
 import java.math.BigDecimal;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,19 +19,12 @@ public class TransactionRepositoryTest {
     @Inject
     private TransactionRepository transactionRepository;
 
-    @Test
-    public void shouldGetNoTransaction(){
 
-        // Count all
-        assertEquals(Long.valueOf(0), transactionRepository.countAll());
-
-
-    }
 
     @Test
     public void shouldCreateOneTransaction(){
 
-        Transaction transaction = new Transaction(new BigDecimal(100),new Date());
+        Transaction transaction = new Transaction(new BigDecimal(100),System.currentTimeMillis());
         transaction = transactionRepository.create(transaction);
         // Checks the created transaction
         assertNotNull(transaction);

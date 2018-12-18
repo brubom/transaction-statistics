@@ -1,6 +1,7 @@
 package com.n26.repository;
 
 import com.n26.model.Statistics;
+import com.n26.model.StatisticsAggregate;
 import com.n26.model.Transaction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,32 +33,25 @@ public class StatisticsRepositoryTest {
     @Test
     public void shouldCreateStatistics(){
 
-        Statistics statistics = new Statistics(
-                new BigDecimal(1000.00),
-                new BigDecimal(100.53),
-                new BigDecimal(200000.49),
-                new BigDecimal(50.23),
-                10L
+        Transaction transaction =  new Transaction(BigDecimal.valueOf(100), System.currentTimeMillis());
 
-        );
+        statisticsRepository.updateStatistics(transaction);
 
-        statisticsRepository.updateStatistics(statistics);
-
-        assertNotNull(statistics);
+        assertNotNull(transaction);
     }
 
     @Test
     public void shouldReturnStatisticsFromLastSixtySeconds(){
 
         addSomeTransactions();
-        Statistics statistics = statisticsRepository.fromLast(60);
+        StatisticsAggregate statistics = statisticsRepository.getStatistics();
 
         assertNotNull(statistics);
 
-        assertEquals(new BigDecimal(533.33), statistics.getAvg());
-        assertEquals(new BigDecimal(1000), statistics.getMax());
-        assertEquals(new BigDecimal(100), statistics.getMin());
-        assertEquals(new BigDecimal(1600), statistics.getSum());
+        assertEquals(new BigDecimal(533.33), statistics.getAggregateAvg());
+        assertEquals(new BigDecimal(1000), statistics.getAggregateMax());
+        assertEquals(new BigDecimal(100), statistics.getAggregateMin());
+        assertEquals(new BigDecimal(1600), statistics.getAggregateSum());
         assertEquals(Long.valueOf(3), statistics.getCount());
 
 
@@ -65,17 +59,12 @@ public class StatisticsRepositoryTest {
 
     private void addSomeTransactions(){
 
-        transactionRepository.create(new Transaction(new BigDecimal(100),new Date()));
-        transactionRepository.create(new Transaction(new BigDecimal(1000),new Date()));
-        transactionRepository.create(new Transaction(new BigDecimal(500),new Date()));
+        transactionRepository.create(new Transaction(new BigDecimal(100),System.currentTimeMillis() ));
+        transactionRepository.create(new Transaction(new BigDecimal(1000),System.currentTimeMillis()));
+        transactionRepository.create(new Transaction(new BigDecimal(500),System.currentTimeMillis()));
 
         transactionRepository.create(new Transaction(new BigDecimal(500),
-                Date.from(
-                        LocalDateTime.of(2015,
-                                Month.FEBRUARY,
-                                20, 06, 30)
-                                .atZone(ZoneId.systemDefault())
-                                .toInstant() )));
+                LocalDateTime.now().minusSeconds(70).atZone(ZoneId.systemDefault()).toEpochSecond()));
     }
 
 

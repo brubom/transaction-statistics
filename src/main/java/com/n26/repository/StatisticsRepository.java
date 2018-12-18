@@ -2,20 +2,25 @@ package com.n26.repository;
 
 import com.n26.data.StatisticsDb;
 import com.n26.model.Statistics;
+import com.n26.model.StatisticsAggregate;
+import com.n26.model.Transaction;
+
+import javax.inject.Inject;
 
 public class StatisticsRepository {
 
-    private final StatisticsDb statisticsDb = StatisticsDb.getInstance();
+    @Inject
+    private StatisticsDb statisticsDb;
 
-    public void updateStatistics(Statistics statistics) {
+    public void updateStatistics(Transaction transaction) {
 
-        statisticsDb.setStatistics(statistics);
+        statisticsDb.updateStatistics(transaction);
 
     }
 
-    public Statistics fromLast(int seconds) {
+
+    public StatisticsAggregate getStatistics() {
 
         return statisticsDb.getStatistics();
-
     }
 }

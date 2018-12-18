@@ -2,19 +2,24 @@ package com.n26.data;
 
 import com.n26.model.Transaction;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TransactionDbTest {
 
-    private final TransactionDb db = TransactionDb.getInstance();
+    @Inject
+    private TransactionDb db;
 
     @Test
-    public void shouldHaveInstance(){
+    public void shouldHave_TransactionDbInstance(){
 
 
         assertNotNull(db);
@@ -23,18 +28,12 @@ public class TransactionDbTest {
     @Test
     public void shouldAddItem(){
 
-        db.add(new Transaction(new BigDecimal(100), new Date()));
+        db.add(new Transaction(new BigDecimal(100), System.currentTimeMillis()));
     }
 
     @Test
-    public void shouldAddAndRetrieveItem(){
+    public void shouldClearTransactions(){
 
-        Date date = new Date();
-        db.add(new Transaction(new BigDecimal(100), date));
-        Transaction transaction = db.get(0);
-
-        assertNotNull(transaction);
-        assertEquals(date.getTime(), transaction.getTimestamp().getTime());
-        assertEquals(new BigDecimal(100), transaction.getAmount());
+        db.clear();
     }
 }

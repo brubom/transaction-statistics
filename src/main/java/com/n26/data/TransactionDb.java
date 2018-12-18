@@ -1,103 +1,37 @@
 package com.n26.data;
 
+import com.n26.model.Statistics;
 import com.n26.model.Transaction;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * @author brunomoreira
- * NOT a real db, of course, just a quick singleton implementation. Although it says
+ * NOT a real db, of course, just a quick in memory collection/cache implementation. Although it says
  * on exercise that this should be a prod ready code, using a nosql database or at least a
  * caching mechanism is a must.
  */
 public class TransactionDb {
 
-    private static final TransactionDb INSTANCE = new TransactionDb();
-    public static TransactionDb getInstance() {
-        return INSTANCE;
+
+    @Inject
+    private StatisticsDb statisticsDb;
+
+    public void clear() {
+
+        statisticsDb.clear();
     }
 
-    private LinkedList<Transaction> transactions = new LinkedList<>();
 
-    private static final int CACHE_TTL = 60;
+    public void add(Transaction transaction) {
 
-    private TransactionDb(){
-
-        Thread t = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(CACHE_TTL * 1000);
-                } catch (InterruptedException ex) {
-                }
-                cleanup();
-            }
-        });
-
-        t.setDaemon(true);
-        t.start();
-    }
-
-    public void add(Transaction transaction){
-        transactions.add(transaction);
-    }
-
-    public void clear(){
-
-        transactions.clear();
-    }
-
-    public Transaction get(int index){
-        return transactions.get(index);
-    }
-
-   public Long count(){
-        return Long.valueOf(transactions.size());
-   }
-   
-   public LinkedList<Transaction>  getAllTransactions(){
-        return this.transactions;
-   }
-
-
-   private void cleanup(){
-
-
-       synchronized (transactions) {
-
-           while (true) {
-
-               Transaction transaction = this.transactions.getFirst();
-               if (transaction == null) {
-                   break;
-               }
-
-               LocalDateTime currentTime = LocalDateTime.now();
-
-               LocalDateTime transactionTime =
-                       LocalDateTime.ofInstant(transaction.getTimestamp().toInstant(), ZoneId.systemDefault());
-
-               if (SECONDS.between(currentTime, transactionTime) > CACHE_TTL) {
-                   transactions.removeFirst();
-                   updateStatistics();
-               } else {
-                   break;
-               }
-
-               Thread.yield();
-
-           }
-       }
-
-
-   }
-
-    private void updateStatistics() {
-
+        statisticsDb.updateStatistics(transaction);
 
     }
-
 }

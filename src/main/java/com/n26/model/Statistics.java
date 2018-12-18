@@ -14,6 +14,16 @@ public class Statistics {
     private BigDecimal min;
     private Long count;
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    private Long timestamp;
+
     public Statistics(){
 
     }

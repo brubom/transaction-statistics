@@ -27,11 +27,13 @@ public class Application {
     }
 
     @Bean
-    public StatisticsDb simpleStatisticsDb(){
-        return StatisticsDb.getInstance();
+    public StatisticsDb statisticsDb(){
+        return new StatisticsDb();
     }
 
-    public TransactionDb simpleTransactionDb(){
-        return TransactionDb.getInstance();
+    @Bean
+    public TransactionDb transactionDb(){
+
+        return new TransactionDb();
     }
 }
