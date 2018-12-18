@@ -18,4 +18,8 @@ public class TransactionRepository {
         transactionDb.add(transaction);
         return transaction;
     }
+
+    public void clear() {
+        transactionDb.clear();
+    }
 }

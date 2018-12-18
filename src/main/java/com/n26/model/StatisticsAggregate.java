@@ -11,48 +11,50 @@ public class StatisticsAggregate {
     public StatisticsAggregate(Statistics statistics){
 
         this.count = statistics.getCount();
-        this.aggregateMax = statistics.getMax();
-        this.aggregateMin = statistics.getMin();
-        this.aggregateSum = statistics.getSum();
+        this.max = statistics.getMax();
+        this.min = statistics.getMin();
+        this.sum = statistics.getSum();
     }
 
 
-    private BigDecimal aggregateSum = new BigDecimal(0);
 
-    public BigDecimal getAggregateSum() {
-        return aggregateSum;
+
+    public BigDecimal getSum() {
+        return sum;
     }
 
-    public void setAggregateSum(BigDecimal aggregateSum) {
+    public void setSum(BigDecimal sum) {
 
-        this.aggregateSum = aggregateSum.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.sum = sum.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public BigDecimal getAggregateAvg() {
-        return aggregateAvg;
+    public BigDecimal getAvg() {
+        return avg;
     }
 
-    public void setAggregateAvg(BigDecimal aggregateAvg) {
+    public void setAvg(BigDecimal avg) {
 
-        this.aggregateAvg = aggregateAvg.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.avg = avg.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public BigDecimal getAggregateMax() {
-        return aggregateMax;
+    public BigDecimal getMax() {
+
+        return max;
     }
 
-    public void setAggregateMax(BigDecimal aggregateMax) {
+    public void setMax(BigDecimal max) {
 
-        this.aggregateMax = aggregateMax.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.max = max.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public BigDecimal getAggregateMin() {
-        return aggregateMin;
+    public BigDecimal getMin() {
+
+        return min;
     }
 
-    public void setAggregateMin(BigDecimal aggregateMin) {
+    public void setMin(BigDecimal min) {
 
-        this.aggregateMin = aggregateMin.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.min = min.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public Long getCount() {
@@ -64,9 +66,10 @@ public class StatisticsAggregate {
         this.count = count;
     }
 
-    private BigDecimal aggregateAvg = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal aggregateMax = new BigDecimal(Double.MIN_VALUE).setScale(2, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal aggregateMin = new BigDecimal(Double.MAX_VALUE).setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal sum = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal avg = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal max = null;
+    private BigDecimal min = null;
     private Long count = 0l;
 
 
@@ -80,11 +83,11 @@ public class StatisticsAggregate {
 
         StatisticsAggregate summary = (StatisticsAggregate) obj;
 
-        if ( aggregateSum.compareTo(summary.aggregateSum) != 0) return false;
+        if ( sum.compareTo(summary.sum) != 0) return false;
         if (count != summary.count) return false;
-        if (aggregateMax.compareTo( summary.aggregateMax) != 0) return false;
-        if (aggregateMin.compareTo( summary.aggregateMin) != 0) return false;
-        return aggregateAvg.compareTo(summary.aggregateAvg)  == 0;
+        if (max.compareTo( summary.max) != 0) return false;
+        if (min.compareTo( summary.min) != 0) return false;
+        return avg.compareTo(summary.avg)  == 0;
 
     }
 }

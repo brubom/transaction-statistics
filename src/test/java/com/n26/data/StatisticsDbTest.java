@@ -1,6 +1,5 @@
 package com.n26.data;
 
-import com.n26.model.Statistics;
 import com.n26.model.StatisticsAggregate;
 import com.n26.model.Transaction;
 import org.junit.Test;
@@ -50,10 +49,10 @@ public class StatisticsDbTest {
         statisticsDb.updateStatistics(new Transaction(BigDecimal.valueOf(1), System.currentTimeMillis() - 20000));
 
         StatisticsAggregate statistics = statisticsDb.getStatistics();
-        assertTrue(statistics.getAggregateMax().compareTo( BigDecimal.valueOf(188.00)) == 0);
-        assertTrue(statistics.getAggregateAvg().compareTo( BigDecimal.valueOf(62.58)) == 0);
-        assertTrue(statistics.getAggregateMin().compareTo(BigDecimal.valueOf(1)) == 0);
-        assertTrue(statistics.getAggregateSum().compareTo(BigDecimal.valueOf(312.88)) == 0);
+        assertTrue(statistics.getMax().compareTo( BigDecimal.valueOf(188.00)) == 0);
+        assertTrue(statistics.getAvg().compareTo( BigDecimal.valueOf(62.58)) == 0);
+        assertTrue(statistics.getMin().compareTo(BigDecimal.valueOf(1)) == 0);
+        assertTrue(statistics.getSum().compareTo(BigDecimal.valueOf(312.88)) == 0);
         assertEquals(statistics.getCount(), Long.valueOf(5));
 
     }

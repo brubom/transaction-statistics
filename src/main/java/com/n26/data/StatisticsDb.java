@@ -23,24 +23,33 @@ public class StatisticsDb {
                 .filter(s -> (System.currentTimeMillis() - s.getTimestamp()) / 1000 < MAX_SECONDS_QUERY)
                 .map(StatisticsAggregate::new)
                 .reduce(new StatisticsAggregate(), (first, second) -> {
-                    first.setAggregateSum(first.getAggregateSum().add(second.getAggregateSum()));
+                    first.setSum(first.getSum().add(second.getSum()));
                     first.setCount( first.getCount() + second.getCount());
 
-                    if (first.getAggregateMax().compareTo(second.getAggregateMax()) < 0)
-                        first.setAggregateMax(second.getAggregateMax());
+                    if (first.getMax() == null || first.getMax().compareTo(second.getMax()) < 0)
+                        first.setMax(second.getMax());
 
-                    if (first.getAggregateMin().compareTo(second.getAggregateMin()) > 0)
-                        first.setAggregateMin(second.getAggregateMin());
+                    if (first.getMin() == null || first.getMin().compareTo(second.getMin()) > 0)
+                        first.setMin(second.getMin());
 
                     return first;
                 });
 
 
 
-        aggregate.setAggregateAvg(aggregate.getCount() > 0l ?
-                aggregate.getAggregateSum().divide(BigDecimal.valueOf(aggregate.getCount())) : BigDecimal.valueOf(0));
+        if (aggregate.getCount() > 0 && aggregate.getMax() != null
+                && aggregate.getMax().compareTo(BigDecimal.valueOf(0)) != 0) {
 
-        //logger.info("Statistics summary for last minute => {}", summary);
+            aggregate.setAvg(
+                    aggregate.getSum().divide(BigDecimal.valueOf(aggregate.getCount()),
+                            BigDecimal.ROUND_HALF_UP));
+        }
+        else
+        {
+            aggregate.setAvg(BigDecimal.valueOf(0));
+        }
+
+
         return aggregate;
     }
 

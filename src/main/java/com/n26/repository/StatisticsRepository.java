@@ -1,7 +1,6 @@
 package com.n26.repository;
 
 import com.n26.data.StatisticsDb;
-import com.n26.model.Statistics;
 import com.n26.model.StatisticsAggregate;
 import com.n26.model.Transaction;
 

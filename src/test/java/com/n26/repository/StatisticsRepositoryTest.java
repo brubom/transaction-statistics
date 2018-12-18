@@ -1,6 +1,5 @@
 package com.n26.repository;
 
-import com.n26.model.Statistics;
 import com.n26.model.StatisticsAggregate;
 import com.n26.model.Transaction;
 import org.junit.Test;
@@ -11,9 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.ZoneId;
-import java.util.Date;
 
 
 import static org.junit.Assert.assertEquals;
@@ -48,10 +45,10 @@ public class StatisticsRepositoryTest {
 
         assertNotNull(statistics);
 
-        assertEquals(new BigDecimal(533.33), statistics.getAggregateAvg());
-        assertEquals(new BigDecimal(1000), statistics.getAggregateMax());
-        assertEquals(new BigDecimal(100), statistics.getAggregateMin());
-        assertEquals(new BigDecimal(1600), statistics.getAggregateSum());
+        assertEquals(new BigDecimal(533.33), statistics.getAvg());
+        assertEquals(new BigDecimal(1000), statistics.getMax());
+        assertEquals(new BigDecimal(100), statistics.getMin());
+        assertEquals(new BigDecimal(1600), statistics.getSum());
         assertEquals(Long.valueOf(3), statistics.getCount());
 
 
